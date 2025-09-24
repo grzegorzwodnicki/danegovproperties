@@ -4,13 +4,17 @@ import sys
 import pandas
 import scrapper
 import logging
-def preparingData(_configObject):
-    _scrapper = scrapper.Scrapper(_configObject.chrome_driver_path, _configObject.chrome_binary_location,logging, _configObject.show_browser)
+def preparingData(_configObject, current_directory):
+    _scrapper = scrapper.Scrapper(_configObject , current_directory, logging)
     _scrapper.preparingCSVData(_configObject.offerUrl)
+    if os.path.exists(_scrapper.output_file):
+        _scrapper.uploadData()
+        os.rename(_scrapper.output_file, _scrapper.output_uploaded_file)
+        
+    else:
+        logging.error("CSV file not exists, upload impossible")
     
-    
-def sendingData(_configObject):
-    pass
+
 
 
 def main():
@@ -34,7 +38,7 @@ def main():
     logging.info("Starting program")
 
 
-    preparingData(_config)
+    preparingData(_config, current_directory)
     
 
 

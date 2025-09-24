@@ -11,6 +11,22 @@ class configClass:
         self.chrome_binary_location = ""
         self.show_browser = True
 
+        
+        self.telefon = ""
+        self.email = ""
+        self.nazwaDevelopera = ""
+        self.wojewodztwo = ""
+        self.powiat = ""
+        self.miejscowosc = ""
+        self.ulica = ""
+        self.kod_pocztowy = ""
+        self.rodzaj_nieruchomosci = ""
+        self.wartosc_swiadczen = 0
+        self.portalUrl = ""
+        self.portalUsername = ""
+        self.portalPassword = ""
+        self.publishData = False
+        
         self.read_file(config_file)
 
     def get_value(self,cnf,section,key,default):
@@ -44,6 +60,23 @@ class configClass:
         self.chrome_binary_location = self.get_value(config,'scrapper','chrome_binary_path','')
         self.show_browser = self.get_value(config,'scrapper', 'show_browser','1') == '1'
         self.offerUrl = self.get_value(config, 'offersParameters','offerUrl', 'https://ametystowa.pl/oferta-domow/')
+        self.telefon =  self.get_value(config, 'offersParameters', 'telefon','')
+        self.email = self.get_value(config, 'offersParameters', 'email','')
+        self.nazwaDevelopera = self.get_value(config, 'offersParameters', 'nazwaDevelopera','')
+        self.wojewodztwo = self.get_value(config, 'offersParameters', 'wojewodztwo','')
+        self.powiat = self.get_value(config, 'offersParameters', 'powiat','')
+        self.miejscowosc = self.get_value(config, 'offersParameters', 'miejscowosc','')
+        self.ulica = self.get_value(config, 'offersParameters', 'ulica','')
+        self.kod_pocztowy = self.get_value(config, 'offersParameters', 'kod_pocztowy','')
+        self.rodzaj_nieruchomosci = self.get_value(config, 'offersParameters', 'rodzaj_nieruchomosci','')
+        self.wartosc_swiadczen = int(self.get_value(config, 'offersParameters', 'wartosc_swiadczen','0'))
+        self.portalUrl = self.get_value(config, 'uploadParameters', 'portalUrl','')
+        self.portalUsername = self.get_value(config, 'uploadParameters', 'username','')
+        self.portalPassword = self.get_value(config, 'uploadParameters', 'password','')
+        self.publish_data = self.get_value(config,'uploadParameters', 'publish_data','0') == '1'
+        
+ 
+        
         
 
         
