@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from webdriver_manager.chrome import ChromeDriverManager
 from datetime import date, timedelta
-
+from selenium.webdriver.support.ui import Select
 import time
 import json
 import sys
@@ -154,10 +154,44 @@ class Scrapper:
 
 
         self.chDriver.find_element(By.ID, 'submit-button').click()
-
+        time.sleep(2)
+        self.addLog("Opening admin page")
+        self.chDriver.get('https://admin.dane.gov.pl/datasets/dataset/8053/change/#resources')
+        time.sleep(1)
+        self.addLog("Filling form with additional resource")
+        self.chDriver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        _divs = self.chDriver.find_elements(By.CSS_SELECTOR, "div.djn-module.djn-add-item.add-item.add-row")
+        self.addLog(f"Found {len(_divs)} divs with add resource")
         
+        for _div in _divs:
+            _a = _div.find_elements(By.TAG_NAME, 'a')
+            if len(_a) > 0:
+                self.addLog(f"Found {_a[0].text} links in add resource div")
+                if ('Dodaj Zasób' in _a[0].text ):
+                    self.addLog("Clicking on add resource")
+                    time.sleep(1)
+                    _a[0].click()
+        time.sleep(2)
+        upload = self.chDriver.find_element(By.ID, "id_resources-2-0-file")
+        upload.send_keys(self.output_file)
+        Select(self.chDriver.find_element(By.ID, "id_resources-2-0-language")).select_by_value('pl')
+  
+        self.chDriver.find_element(By.ID, "id_resources-2-0-title").send_keys(self.config.title.replace("<current_date>", date.today().strftime("%d.%m.%Y")))
+        #self.chDriver.find_element(By.ID, "id_resources-2-0-description").send_keys(self.config.description)
+        self.chDriver.execute_script("""
+                CKEDITOR.instances['id_resources-2-0-description'].setData(arguments[0]);
+        """, self.config.description)
 
-        time.sleep(500)
+
+
+        Select(self.chDriver.find_element(By.ID, "id_resources-2-0-status")).select_by_value( "published" if self.config.publish_data else "draft")
+        
+        
+        _buttons = self.chDriver.find_elements(By.NAME, "_continue")
+        if len(_buttons) >0:
+            self.addLog("Saving data")
+            _buttons[0].click()
+        time.sleep(5000)
         
     def openBrowser(self, _url):
         chrome_options = Options()

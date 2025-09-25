@@ -26,7 +26,8 @@ class configClass:
         self.portalUsername = ""
         self.portalPassword = ""
         self.publishData = False
-        
+        self.title = ""
+        self.description = ""
         self.read_file(config_file)
 
     def get_value(self,cnf,section,key,default):
@@ -74,6 +75,8 @@ class configClass:
         self.portalUsername = self.get_value(config, 'uploadParameters', 'username','')
         self.portalPassword = self.get_value(config, 'uploadParameters', 'password','')
         self.publish_data = self.get_value(config,'uploadParameters', 'publish_data','0') == '1'
+        self.title = self.get_value(config,'uploadParameters', 'title','')
+        self.description = self.get_value(config,'uploadParameters', 'description','')
         
  
         
